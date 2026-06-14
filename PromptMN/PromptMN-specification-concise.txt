@@ -1,0 +1,79 @@
+PromptMN v1.0.0 — a pseudo-prompting DSL giving typed, semantic directives for AI prompt interpretation/execution.
+
+Author: Enkhzol Dovdon, License: MIT License, Copyright (c) 2026 Enkhzol Dovdon
+
+SYNTAX
+- Keywords are inline directives prefixed with %, resolved semantically (not by source order). Authors may write keywords in any order/position; interpreter reorders by meaning before executing.
+- Default forms: `%keyword <text>;` or `%keyword {statement; statement; ...}`. Special forms noted per keyword.
+- Program boundary: `∞ ... ∞` encloses the full token set; tokens comma-separated; each token has a distinct meaning the interpreter must apply.
+
+Token set:
+∞;,{,},\n,%role,%intro,%goal,%techs,%aware,%risk,%problem,%example,%note,%label,%domain,%req,%reqfunc,%reqnonfunc,%newreq,%should,%could,%optional,%rule,%mustnot,%plan,%number,%showplan,%trace,%if,%else,%repeat,%continue,%break,%goto,%var,%method,%return,%in,%data,%ignore,%out,%visualize,%diagram,%add,%del,%update,%addition,%newconcept,%format,%meta∞
+
+Keywords are grouped in 7 clusters. Cluster 1 underlies the whole prompt.
+
+CLUSTER 1 — Lexical Syntax (foundational)
+- %keyword: generic notation for a unique command adding instructional info. May appear multiple times, any position; interpreter resolves by semantics, not order.
+- `;` ends a statement.
+- `{ ... }` block scope: groups statements belonging to the immediately preceding command. Tokens `{` and `}` are the open/close. Form: `%keyword {stmt; stmt; ...}`.
+- `\n` newline: line break; a new term/expression begins after it.
+- `<condition>`: something evaluable as true/false or satisfied/not (simple declaration or logical expression).
+- Angle-bracket tokens (`<condition>`, `<name>`, `<expression>`) are meta-syntactic placeholders, NOT keywords.
+
+CLUSTER 2 — Context and Intent
+- %role: assigns persona(s); all later directives interpreted through this lens. `%role <role>;` or `%role {r1; r2;}`. Ex: `%role senior software architect;`
+- %intro: background/contextual overview of problem, domain, or scope.
+- %goal: intended purpose/success criteria; what good looks like (distinct from %problem). `%goal <text>;` or `%goal {stmts;}`.
+- %techs: preferred tech stack(s); recommendations must favor these unless a constraint prevents it.
+- %aware: info/assumptions/risks/conditions to be aware of when applying requirements.
+- %risk: a potential event that may harm the outcome; account for it.
+- %problem: the situation/need — what is wrong or missing, before choosing a solution.
+- %example: supporting illustration (scenario or I/O) clarifying meaning; not a substitute for real requirements.
+- %note: brief supporting point to clarify/highlight.
+- %label: short name/tag to identify, categorize, or describe quickly.
+- %domain: specifies the domain and supplies its terminology/conventions/background; scopes the model's frame of reference for all later directives.
+
+CLUSTER 3 — Requirements & Governance
+- %req: a testable requirement of what must be done/satisfied.
+- %reqfunc: functional requirement — a behavior the system must perform.
+- %reqnonfunc: non-functional requirement — quality/constraint (performance, security, reliability).
+- %newreq: introduces a new requirement; on conflict it overrides existing requirement(s). Typed override scoped to requirements (vs %update's generic edit).
+- %should: Should-have — important but not vital.
+- %could: Could-have — nice to have; deliver only if time/resources remain.
+- %optional: item(s) to incorporate unless they conflict with another requirement/constraint.
+- %rule: condition-based policy defining what is allowed/required/triggered in given situations.
+- %mustnot: hard constraint forbidding behaviors/technologies/conditions. `%mustnot {t1; t2;}`. Ex: `%mustnot do not hallucinate`.
+
+CLUSTER 4 — Planning & Orchestration
+- %plan: states intended outcome/high-level strategy (not the program itself).
+- %<number>: a sequentially ordered step; integer = execution position. Steps may appear anywhere; interpreter collects and sequences ascending before execution. `%number` is the abstract category; concrete steps are `%1, %2, ...`. Ex: `%1 load dataset; %2 preprocess; %3 train; %4 evaluate;`
+- %showplan: model must present its execution plan before acting.
+- %trace: model must emit an execution trace / reasoning summary with its output (delivered via %out); complements %showplan (which comes before actions).
+
+CLUSTER 5 — Control-Flow & Computation
+- %if <condition>: if true, execute statement/block; if false, skip (or do alternative). `%if <cond> {stmts;}` or `%if <cond> stmt;`. Ex: `%if <login is successful> {navigate to Home;}`
+- %else: alternative for the preceding if. `%else {stmts;}` or `%else stmt;`.
+- %repeat <condition>: while true, execute statement/block repeatedly until false. `%repeat <cond> {stmts;}` or `%repeat <cond> stmt;`.
+- %continue: skip rest of current %repeat iteration; re-evaluate condition. `%continue;`
+- %break: terminate enclosing %repeat immediately; resume after loop. `%break;`
+- %goto: continue at a labeled statement. Labels declared inline as `%jumplabel-<N>:` before the target (distinct from %label). `%jumplabel-<N>: stmt; ... %goto %jumplabel-<N>;`. Ex: `%jumplabel-1: retry; %if <failed> {%goto %jumplabel-1;}`
+- %var: declares a mutable named value; also a placeholder substituted by its value wherever `%<name>` appears in text. `%var %<name>; %<name> = <expr>;`. Ex: `%var %customer = "Alice"; %out "Dear %customer, your order is confirmed.";`
+- %method: defines a named unit of behavior. `%method %<name>(<params>) {stmts;}`. Ex: `%method %greet(%user) {%out "Hello, %user";}`
+- %return: ends current %method, optionally returning a value/expression; without a value, exits with no result. `%return;` or `%return <expr>;`. Ex: `%method %max(%a,%b){%if <%a > %b>{%return %a;} %return %b;}`
+
+CLUSTER 6 — Data Interface
+- %in: provides input data (files, structured, or unstructured).
+- %data: declares a named structured collection (record/table/list/key-value) treated as typed addressable data, not free text; referenced by %in/%out/%method/steps. `%data %<name> {k: v; ...}` or `%data %<name> [i1; i2; ...]`. Ex: `%data %user {name:"Frank"; role:"admin"; active:true;}`
+- %ignore: exclude file(s)/directories(+contents)/context elements; never read or factored in, even if present elsewhere. `%ignore <path>;` or `%ignore {p1; p2;}`. Ex: `%ignore {node_modules/; legacy/;}`
+- %out: declares the observable output.
+- %visualize: render subject as a visual artifact (instead of/in addition to prose); specialization of %out constraining the medium. `%visualize <subject> {format:<name>; stmts;}` or `%visualize <subject>;`. Ex: `%visualize <user login flow> {format:mermaid; type:sequenceDiagram;}`
+- %diagram: shorthand for %visualize with Mermaid default. `%diagram <subject> {type:<mermaid-type>;}` or `%diagram <subject>;`.
+
+CLUSTER 7 — Meta & Lifecycle Operations
+- %add: introduce a new element into context.
+- %del: delete an existing element from context.
+- %update: modify an existing element in context.
+- %addition: provide extra information, written in prompt syntax.
+- %newconcept: introduce a new keyword + explanation; overrides on conflict. Introduces a language element (vs %add's content element). `%newconcept %<keyword> {explanation;}`
+- %format: default rendering format for %out/%visualize in scope (markdown, json, yaml, plain text). `%format <name>;`.
+- %meta: metadata about the PromptMN program itself (author, version, target, audience, locale). Descriptive by default; agents may use it to gate/adapt execution but it has no built-in side effects. `%meta {k: v; ...}`

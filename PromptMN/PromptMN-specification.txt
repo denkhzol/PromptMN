@@ -1,0 +1,144 @@
+PromptMN is a pseudo‑prompting language (domain‑specific language) designed to provide typed, semantic directives for AI prompt interpretation and execution.
+
+Version: 1.0.0
+Author: Enkhzol Dovdon
+License: MIT License
+Copyright (c) 2026 Enkhzol Dovdon
+
+PromptMN defines a set of reserved keywords that function as interpreter directives. These directives govern how an AI model interprets, organises, and executes prompt instructions.
+
+PromptMN annotates prompts using keywords written inline with prose, prefixed with %, and resolved semantically before execution. This allows authors to compose prompts in any reading order without affecting interpretation.
+
+The delimiter pair ∞ … ∞ marks the program boundary and encloses the language’s complete token set. Within this boundary, tokens are separated by commas (,), and every listed token carries a distinct meaning that the interpreter must correctly recognise and apply.
+
+Keywords without an explicit format use the default forms %keyword <text>; or %keyword {statements;}.
+
+Token Set:
+∞;,{,},\n,%role,%intro,%goal,%techs,%aware,%risk,%problem,%example,%note,%label,%domain,%req,%reqfunc,%reqnonfunc,%newreq,%should,%could,%optional,%rule,%mustnot,%plan,%number,%showplan,%trace,%if,%else,%repeat,%continue,%break,%goto,%var,%method,%return,%in,%data,%ignore,%out,%visualize,%diagram,%add,%del,%update,%addition,%newconcept,%format,%meta∞
+
+The keywords are organised into seven contextual clusters. Cluster 1 applies to the entire prompt as its foundation.
+
+Cluster 1. Lexical Syntax (Foundational)
+
+%keyword is generic notation for a unique command that provides additional instructional information. Keywords may appear multiple times and in any position within a prompt. Therefore, the interpreter should logically reorder keywords, resolving them by semantics rather than source order, before executing or following their instructions.
+
+Where the syntax is non-obvious, a Format and a For example line follow the definition; otherwise, the default keyword forms given above apply.
+
+Semicolon (;) completes an expression statement.
+
+Curly braces ({ ... }) define a block scope by grouping a sequence of statements that belong to the command that immediately precedes them; they are written and used as the pair { ... }, and the entries { and } in the enumeration above denote the opening and closing of that pair. Format: %keyword {statement; statement; ...}
+
+\n (newline) indicates a line break. After \n, a new term or expression begins.
+
+<condition> represents a condition that can be evaluated as true or false, or as satisfied or not satisfied. A condition can be a simple declaration or a logical expression.
+
+Angle-bracket tokens such as <condition>, <name>, or <expression> are meta-syntactic placeholders and are not themselves registered keywords.
+
+Cluster 2. Context and Intent
+
+%role assigns one or more personas to the AI model or agent, instructing it to interpret and respond as the specified role(s). All subsequent directives in the prompt are processed through this persona lens. Format: %role <role>; or %role {role1; role2; ...} For example: %role senior software architect; or %role {senior software engineer; AI engineer;}
+
+%intro background information or contextual overview necessary to understand the problem, domain, or document scope.
+
+%goal defines the intended purpose or success criteria of the task and explains what a good outcome looks like, distinct from %problem, which describes the current unsatisfactory situation. Format: %goal <text>; or %goal {statements;}
+
+%techs declares the preferred technology stack(s) for the solution; any recommendation or design decision must favour these technologies unless a constraint prevents it.
+
+%aware indicates information, assumptions, risks, or conditions that the reader or system should be aware of when interpreting or applying the requirements.
+
+%risk flags a potential event that may negatively affect the outcome and should therefore be accounted for in the proposal or decision.
+
+%problem states the situation or need to be addressed, expressed as what is wrong or missing before deciding on a solution.
+
+%example provides a supporting illustration (sample scenario or input/output) used to clarify meaning but not to replace real requirements.
+
+%note records a brief supporting point used to clarify or highlight information.
+
+%label assigns a short name or tag used to identify, categorize, or describe an item quickly.
+
+%domain specifies the applicable domain and provides relevant knowledge, terminology, and background context from that field that the AI model or agent should draw upon when interpreting and executing the prompt. It scopes the model's frame of reference to a particular subject area, ensuring that domain-specific conventions and assumptions are applied consistently across all subsequent directives.
+
+Cluster 3. Requirements & Governance
+
+%req states a testable requirement of what it must do or satisfy. 
+
+%reqfunc describes a functional requirement: a behavior or function the system must perform (what it does).
+
+%reqnonfunc specifies a non-functional requirement: a quality attribute or constraint, such as performance, security, or reliability (how well it works).
+
+%newreq introduces a new requirement, and if there is a conflict between the new one and the current requirement(s) in the existing context, the new requirement overrides them. Unlike %update, which performs a generic edit on any element, %newreq is a typed override scoped to requirements.
+
+%should marks a Should-have: important but not vital.
+
+%could marks a Could-have: nice to have; deliver it only if time and resources remain.
+
+%optional marks item(s) the solution should incorporate unless doing so conflicts with or disrupts another requirement or constraint.
+
+%rule defines a condition-based policy or logic that determines what is allowed, required, or triggered in specific situations.
+
+%mustnot imposes a hard constraint that restricts options or forbids certain behaviors, technologies, or conditions. Format: %mustnot {text1; text2; …} For example: %mustnot do not hallucinate
+
+
+Cluster 4. Planning & Orchestration
+
+%plan presents instructions or communicates one or more intentions to the AI model or agent. It states the intended outcome or high-level strategy rather than the program itself.
+
+%<number> declares a sequentially ordered step or event, where the integer indicates execution position. Steps are processed in ascending numeric order and may appear anywhere in the prompt; the interpreter collects and sequences them before execution. In the token set, %number denotes this abstract category; concrete steps are written as %1, %2, %3, and so on. Format: %1 <text>; %2 <text>; %3 <text>; For example: %1 load dataset; %2 preprocess features; %3 train model; %4 evaluate metrics;
+
+%showplan specifies that the AI model or agent must explicitly present its execution plan before performing any actions.
+
+%trace requires the AI model or agent to emit an execution trace or reasoning summary alongside its output, so that the steps actually taken can be reviewed after the fact. The trace itself is delivered via %out and complements %showplan, which is presented before the actions. 
+
+
+Cluster 5. Control-Flow & Computation
+
+%if <condition> if the condition evaluates to true or valid, a statement or a group of statements defined within curly braces should be followed or executed accordingly. If the condition is false or invalid, skip the statements (or perform an alternative action). Format: %if <condition> {statements;} or %if <condition> statement; For example: %if <login is successful> {navigate to the Home page;}
+
+%else Use else to define an alternative action for the preceding if statement.
+Format: %else {statements;} or %else statement; For example: %if <login is successful> {navigate to the Home page;} %else {show the error message and offer sign-up;}
+
+%repeat if the condition evaluates to true or valid, a statement or a group of statements defined within curly braces should be executed repeatedly until the condition becomes false or invalid. When the condition is false, stop the repetition. Format: %repeat <condition> {statements;} or %repeat <condition> statement; For example: %repeat <there is no obstacle> the player should continue its current movement;
+
+%continue skips the remaining statements in the current iteration of the enclosing %repeat loop and proceeds to re-evaluate its condition for the next iteration. Format: %continue; For example: %repeat <there are items> {%if <item is invalid> {%continue;} process the item;}
+
+%break terminates the enclosing %repeat loop immediately, regardless of whether its condition still holds, and resumes execution after the loop. Format: %break; For example: %repeat <there are items> {%if <target is found> {%break;} inspect the next item;}
+
+%goto indicates that further processing should continue at the specified labeled statement, such as %jumplabel-1, %jumplabel-2, or %jumplabel-3. A label is declared in-line using the form %jumplabel-<N>: before the target statement, distinct from %label in Cluster 2 which tags content. Format: %jumplabel-<N>: statement; ... %goto %jumplabel-<N>; For example: %jumplabel-1: retry the request; %if <failed> {%goto %jumplabel-1;}
+
+%var declares a named data holder whose value can change while an algorithm or system operates. It assigns a value, and can also serve as a placeholder that is substituted with its value wherever it appears in the surrounding text, so the same prompt skeleton can be reused, localized, or refactored without manual editing. Within a string, any %<name> token is substituted with its current value. Format: %var %<name>; %<name> = <expression>; For example: %var %counter; %counter = 1000; or %var %customer = "Alice"; %out "Dear %customer, your order is confirmed.";
+
+%method defines a named unit of behavior. Format: %method %<name>(<params>) {statements;} For example: %method %greet(%user) {%out "Hello, %user";}
+
+%return terminates the current %method execution and optionally passes a value or the result of an expression back to the call site. When used without a value, it exits the method immediately and returns control to the caller with no result. Format: %return; or %return <expression>; For example: %method %max(%a, %b) {%if <%a > %b> {%return %a;} %return %b;}
+
+
+Cluster 6. Data Interface
+
+%in provides input data (files, structured data, or unstructured data) for an AI model or process.
+
+%data declares a named, structured collection — such as a record, table, list, or key-value set that the AI model or agent should treat as a typed, addressable data structure rather than free-form text. It can be referenced by %in, %out, %method, or step directives, enabling structured data to be passed and consumed consistently across the prompt program. Format: %data %<name> {key: value; key: value; ...} or %data %<name> [item1; item2; ...] For example: %data %user {name: "Frank"; role: "admin"; active: true;} or %data %scores [90; 85; 92;]
+
+%ignore instructs the AI model or agent to exclude and disregard the specified file(s), directories (including all their contents), or context elements from the task. Items listed under %ignore are never read, referenced, or factored into execution, regardless of whether they appear elsewhere in the context window. Format: %ignore <path>; or %ignore {path1; path2; ...} For example: %ignore {draft/; example.md;}
+
+%out declares the observable output.
+
+%visualize instructs the AI model or agent to render the specified subject as a visual artifact rather than (or in addition to) prose. %visualize and %diagram are specializations of %out that constrain the output medium. Format: %visualize <subject> {format: <name>; statements;} or %visualize <subject>; For example: %visualize <user login flow> {format: mermaid; type: sequenceDiagram;}
+
+%diagram is a shorthand for %visualize using Mermaid as the default format. Format: %diagram <subject> {type: <mermaid-type>;} or %diagram <subject>; For example: %diagram <component architecture> {type: flowchart;}
+
+
+Cluster 7. Meta & Lifecycle Operations
+
+%add introduces a new element into the current context.
+
+%del deletes an existing element from the current context.
+
+%update modifies an existing element in the current context.
+
+%addition used to provide additional information, with the context written using prompt syntax.
+
+%newconcept introduces a new keyword together with its explanation into the current context. If the new keyword conflicts with an existing one, the new definition overrides the existing one. Distinct from %add, which introduces a content element; %newconcept introduces a language element (a new keyword). Format: %newconcept %<keyword> {explanation;}
+
+%format declares a default rendering format for %out or %visualize within its scope, such as markdown, json, yaml, or plain text. Format: %format <name>; For example: %format markdown;
+
+%meta declares metadata about the PromptMN program itself rather than about the domain it describes, such as author, version, intended execution target, audience, or locale. %meta is descriptive by default; agents may use it to gate or adapt execution (for example, refusing to run if the declared target does not match), but it has no built-in side effects. Format: %meta {key: value; key: value; ...} For example: %meta {author: Enkhzol Dovdon; version: 1.0.0; license: MIT; target: any-LLM;}
