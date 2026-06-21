@@ -81,7 +81,7 @@ C --> D[Create the game<br/>with the revised prompt<br/>in Agent mode]
 D --> E[Execute the demo<br/>play the 2D game]
 ```
 
-[Watch the demo](https://raw.githubusercontent.com/denkhzol/PromptMN/main/assets/videos/03-reverse-prompt-engineering.mp4)
+https://github.com/user-attachments/assets/59d1cd9a-3ac7-403a-8461-9dbe0d345962
 
 ## Documentation
 
