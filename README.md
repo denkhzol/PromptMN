@@ -81,7 +81,9 @@ C --> D[Create the game<br/>with the revised prompt<br/>in Agent mode]
 D --> E[Execute the demo<br/>play the 2D game]
 ```
 
-https://github.com/user-attachments/assets/59d1cd9a-3ac7-403a-8461-9dbe0d345962
+
+https://github.com/user-attachments/assets/ee24ad7b-c744-4b70-90a3-f45946a2bfca
+
 
 ## Documentation
 
