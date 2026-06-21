@@ -87,8 +87,8 @@ https://github.com/user-attachments/assets/ee24ad7b-c744-4b70-90a3-f45946a2bfca
 
 ## Documentation
 
-- [Language specification](docs/specification.md) — the full reference.
-- [Concise reference](docs/specification-concise.md) — every keyword at a glance.
+- [Language specification](PromptMN/PromptMN-specification.txt) — the full reference.
+- [Concise reference](PromptMN/PromptMN-specification-concise.txt) — every keyword at a glance.
 
 ## What's next
 
@@ -103,7 +103,7 @@ docs, or open an issue or pull request — every bit helps PromptMN grow.
 
 ## Contact
 
-Enkhzol Dovdon — [dovdon.enkhzol@outlook.com](mailto:dovdon.enkhzol@outlook.com)
+Enkhzol Dovdon: [dovdon.enkhzol@outlook.com](mailto:dovdon.enkhzol@outlook.com)
 
 ## License
 
