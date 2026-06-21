@@ -41,7 +41,7 @@ Read the paper: **[PromptMN: Pseudo Prompting Language (arXiv:2606.17164)](https
 
 The smallest possible PromptMN program — a goal and an output — interpreted and run.
 
-[Watch the demo](https://raw.githubusercontent.com/denkhzol/PromptMN/main/assets/videos/01-hello-world.mp4)
+https://github.com/user-attachments/assets/0aab401d-a685-4c24-93d9-e47d1e9d736b
 
 ### 2. Check a prime number
 
@@ -64,7 +64,7 @@ returning a result.
 %out %is-prime(%number);
 ```
 
-[Watch the demo](https://raw.githubusercontent.com/denkhzol/PromptMN/main/assets/videos/02-check-prime-number.mp4)
+https://github.com/user-attachments/assets/c44df244-1945-441f-86cc-1ac96f82624a
 
 ### 3. Reverse prompt engineering — a Penguin 2D demo
 
