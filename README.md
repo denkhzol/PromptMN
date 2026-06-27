@@ -1,7 +1,8 @@
 # PromptMN
 
-> A pseudo-prompting language (DSL) that gives AI **typed, semantic directives** for
-> interpreting and executing prompts.
+> A pseudo-prompting language (DSL) that combines typed directives, control flow,
+> and structured blocks for writing clear, unambiguous prompts that Generative AI
+> systems can interpret and execute semantically.
 
 [![arXiv](https://img.shields.io/badge/arXiv-2606.17164-b31b1b.svg)](https://arxiv.org/abs/2606.17164)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -14,23 +15,9 @@ role, goal, constraints, and expected output. In agentic and software workflows,
 single misread at the first handoff can cascade through design, development,
 review, and deployment.
 
-PromptMN is a pseudo-prompting language that provides typed directives, control
-flow, and structured blocks for writing clear, unambiguous AI prompts with semantic
-execution. It annotates natural language with compact, `%`-prefixed **typed directives**
-for roles, goals, requirements, priorities, constraints, plans, inputs, and outputs,
-and supports control structures like `%if`, `%else`, `%repeat`, `%method`, and
-data declarations to express logic and structure. It is built for cases where logic
-and semantics are nested and deep, where natural language becomes a chain of "if
-this, then that," and where classical structures such as XML, JSON, or template-style
-prompts impose heavy syntax yet lack semantic clarity in Human-to-GenAI interaction.
+PromptMN is a pseudo-prompting language that provides typed directives, control flow, and structured blocks for writing clear, unambiguous AI prompts with semantic execution. It annotates natural language with compact, `%`-prefixed **typed directives** for roles, goals, requirements, priorities, constraints, plans, inputs, and outputs, and supports control structures like `%if`, `%else`, `%repeat`, `%method`, and data declarations to express logic and structure. It is built for cases where logic and semantics are nested and deep, where natural language becomes a chain of "if this, then that," and where classical structures such as XML, JSON, or template-style prompts impose heavy syntax yet lack semantic clarity in Human-to-GenAI interaction.
 
-Instead of manually tracking every condition, dependency, and logical flow,
-PromptMN lets you write in any order while the interpreter resolves each directive
-by meaning before acting. That makes prompts easier to inspect, reuse, and review
-while keeping them light enough for analysts, managers, developers, and stakeholders.
-A few keywords can express a complete, unambiguous prompt across the software
-development lifecycle, which boosts productivity and reduces repeated interactions
-with Generative AI.
+Instead of manually tracking every condition, dependency, and logical flow, PromptMN lets you write in any order while the interpreter resolves each directive by meaning before acting. That makes prompts easier to inspect, reuse, and review while keeping them light enough for analysts, managers, developers, and stakeholders.A few keywords can express a complete, unambiguous prompt across the software development lifecycle, which boosts productivity, improves accuracy, and reduces repeated interactions with Generative AI while helping conserve time and tokens.
 
 Read the paper: **[PromptMN: Pseudo Prompting Language (arXiv:2606.17164)](https://arxiv.org/abs/2606.17164)**
 
