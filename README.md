@@ -9,28 +9,34 @@
 
 ## What is PromptMN?
 
-Prompting is how we talk to AI — yet in plain prose the parts that matter most (the
-role, the goal, the constraints, the expected output) often sit buried or unsaid. In
-agentic and software workflows, a single misread at the first handoff can ripple
-through every step that follows.
+Prompting is how we talk to AI, but long plain text often buries key intent such as
+role, goal, constraints, and expected output. In agentic and software workflows, a
+single misread at the first handoff can cascade through design, development,
+review, and deployment.
 
-PromptMN makes intent explicit. It annotates natural language with compact,
-`%`-prefixed **typed directives** for roles, goals, requirements, priorities,
-constraints, plans, inputs, and outputs. You write in any order you like, and the
-interpreter resolves each directive by meaning before acting.
+PromptMN is a pseudo-prompting language that provides typed directives, control
+flow, and structured blocks for writing clear, unambiguous AI prompts with semantic
+execution. It annotates natural language with compact, `%`-prefixed **typed directives**
+for roles, goals, requirements, priorities, constraints, plans, inputs, and outputs,
+and supports control structures like `%if`, `%else`, `%repeat`, `%method`, and
+data declarations to express logic and structure. It is built for cases where logic
+and semantics are nested and deep, where natural language becomes a chain of "if
+this, then that," and where classical structures such as XML, JSON, or template-style
+prompts impose heavy syntax yet lack semantic clarity in Human-to-GenAI interaction.
 
-The result sits comfortably between free-form prompting and pseudocode — structured
-enough to inspect, reuse, and review, yet light enough for analysts, managers,
-developers, and stakeholders alike. Often a handful of keywords is all it takes to
-express a complete, unambiguous prompt.
+Instead of manually tracking every condition, dependency, and logical flow,
+PromptMN lets you write in any order while the interpreter resolves each directive
+by meaning before acting. That makes prompts easier to inspect, reuse, and review
+while keeping them light enough for analysts, managers, developers, and stakeholders.
+A few keywords can express a complete, unambiguous prompt across the software
+development lifecycle, which boosts productivity and reduces repeated interactions
+with Generative AI.
 
 Read the paper: **[PromptMN: Pseudo Prompting Language (arXiv:2606.17164)](https://arxiv.org/abs/2606.17164)**
 
-## A first taste
+## Get Started
 
-```promptmn
-%role friendly assistant;
-%goal greet the world;
+```PromptMN
 %repeat <3 times>
     %out: Hello Human–AI World!;
 ```
@@ -48,7 +54,7 @@ https://github.com/user-attachments/assets/0aab401d-a685-4c24-93d9-e47d1e9d736b
 A real method with a condition and a loop, resolved correctly by the model and
 returning a result.
 
-```promptmn
+```PromptMN
 %method %is-prime(%n) {
     %if <%n less than 2>
         { %return false; }
@@ -81,9 +87,44 @@ C --> D[Create the game<br/>with the revised prompt<br/>in Agent mode]
 D --> E[Execute the demo<br/>play the 2D game]
 ```
 
-
 https://github.com/user-attachments/assets/ee24ad7b-c744-4b70-90a3-f45946a2bfca
 
+
+## PromptMN — Nested/Complex Prompt Template
+
+### A nested, complex prompt template for inspiration.
+
+```
+%role senior software engineer;
+%domain {health care; UX; data science;}
+%in {uploaded time-series dataset; visualized image for inspiration;}
+%goal create a dashboard that …;
+%intro {in a previous benchmark with another client, …}
+%aware {the existing architecture rules in …/…/ directory, …}
+%newreq {create a new feature that has the following workflow:
+  %1 …;
+  %2 … . %aware {…;
+            %if <…> {…; …;}
+            %else {%goto %jumplabel-1;} …;
+         }
+  %3 {…;
+    %problem … the current approach in …;
+    %update {…; …;}
+    %could {…;}
+    %mustnot …;
+  }
+  %4 {%reqfunc {…; …;} %jumplabel-1 …;}
+  %rule {…; …;}
+}
+…
+%techs React; TypeScript; Tailwind; Next.js; PostgreSQL; Kubernetes;
+%optional pgvector; Zod; Visx;
+%data …;
+%newreq {…; %method %visualize-occurrence(%dataset) {%out …;}}
+…
+%risk {SQL injection; prompt injection; profanity free; …;}
+%showplan
+```
 
 ## Documentation
 
@@ -92,14 +133,13 @@ https://github.com/user-attachments/assets/ee24ad7b-c744-4b70-90a3-f45946a2bfca
 
 ## What's next
 
-More examples, showcases, and visuals are on the way — including a side-by-side of a
-plain-text prompt versus the same intent written in PromptMN, showing how a few
-keywords can carry a complete, effective prompt.
+More examples, demos, and visuals are coming soon to show how a few keywords can
+capture complete, effective prompts for real workflows and support accurate production.
 
 ## Contributing
 
-Contributions are warmly welcome. Try the language, share an example, sharpen the
-docs, or open an issue or pull request — every bit helps PromptMN grow.
+Contributions are warmly welcome. Try the language, share examples, improve the docs, or
+open an issue or pull request, and every contribution helps PromptMN grow.
 
 ## Contact
 
